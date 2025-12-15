@@ -671,7 +671,6 @@
                 const widget = new RMKWidget(container, {
                     perPage: container.dataset.perPage || 6,
                     category: container.dataset.category || '5',
-                    title: container.dataset.title || '📰 Berita Terbaru',
                     showDate: container.dataset.showDate !== 'false'
                 });
                 
