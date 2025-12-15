@@ -1,7 +1,7 @@
 // RMK WIDGET - GITHUB CDN VERSION
 // URL: https://cdn.jsdelivr.net/gh/username/rmk-widget/widget.js
 // Created: 2024
-
+ 
 (function() {
     'use strict';
     
