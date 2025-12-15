@@ -1,70 +1,57 @@
-// RMK WIDGET - RESPONSIVE VERSION
+// RMK WIDGET - NO TITLE VERSION
 // URL: https://cdn.jsdelivr.net/gh/Roofiq09/newsandpromotion@main/widget.js
-// Updated: 2024 - Desktop 3 columns, Mobile 1 column
+// Updated: 2024 - No title, responsive design
 
 (function() {
     'use strict';
     
-    console.log('🚀 RMK Widget v1.1 Loaded - Responsive Mode');
+    console.log('🚀 RMK Widget v1.2 Loaded - No Title Version');
     
     // ========== INJECT CSS ==========
     const injectCSS = () => {
         const css = `
-        /* RMK Widget Styles v1.1 */
+        /* RMK Widget Styles v1.2 - No Title */
         .rmk-widget-container {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+            margin: 20px auto;
+            padding: 0 15px;
             box-sizing: border-box;
-        }
-        
-        .rmk-widget-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 40px;
-            font-weight: 800;
         }
         
         /* ========== GRID SYSTEM ========== */
         /* DESKTOP: 3 columns */
         .rmk-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
-            gap: 30px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
         }
         
         /* TABLET: 2 columns */
         @media (max-width: 1024px) {
             .rmk-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
+                gap: 20px;
             }
         }
         
         /* MOBILE: 1 column */
         @media (max-width: 768px) {
             .rmk-grid {
-                grid-template-columns: 1fr; /* 1 column for mobile */
-                gap: 20px;
-            }
-            
-            .rmk-widget-title {
-                font-size: 2rem;
-                margin-bottom: 30px;
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
         }
         
         /* ========== POST CARD ========== */
         .rmk-post {
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             cursor: pointer;
             height: 100%;
             display: flex;
@@ -72,8 +59,8 @@
         }
         
         .rmk-post:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
         }
         
         /* ========== IMAGE FIXED SIZE ========== */
@@ -81,7 +68,7 @@
             width: 100%;
             position: relative;
             overflow: hidden;
-            background: #f5f5f5;
+            background: #f8f9fa;
         }
         
         /* ASPECT RATIO 16:9 - SAMA SEMUA */
@@ -97,7 +84,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Pastikan gambar cover seluruh area */
+            object-fit: cover;
             display: block;
             transition: transform 0.5s ease;
         }
@@ -113,28 +100,27 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0073aa, #00a8ff);
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
+            color: #666;
+            font-size: 0.9rem;
         }
         
         /* ========== CONTENT ========== */
         .rmk-content {
-            padding: 25px;
+            padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
         
         .rmk-post-title {
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: #2c3e50;
-            margin: 0 0 15px 0;
+            margin: 0 0 12px 0;
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -143,10 +129,10 @@
         }
         
         .rmk-excerpt {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #666;
-            line-height: 1.6;
-            margin-bottom: 25px;
+            line-height: 1.5;
+            margin-bottom: 20px;
             flex-grow: 1;
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -157,9 +143,9 @@
         .rmk-meta {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
             color: #888;
         }
         
@@ -167,41 +153,38 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #0073aa, #005f87);
+            background: #0073aa;
             color: white;
-            padding: 14px 25px;
-            border-radius: 50px;
+            padding: 10px 20px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
+            font-weight: 500;
+            font-size: 0.9rem;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             width: 100%;
         }
         
         .rmk-btn:hover {
-            background: linear-gradient(135deg, #005f87, #004a6e);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 115, 170, 0.3);
+            background: #005f87;
         }
         
         /* ========== LOADING & ERROR ========== */
         .rmk-loading {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             grid-column: 1 / -1;
         }
         
         .rmk-spinner {
-            border: 5px solid rgba(0, 115, 170, 0.1);
-            border-top: 5px solid #0073aa;
+            border: 4px solid rgba(0, 115, 170, 0.1);
+            border-top: 4px solid #0073aa;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: rmkSpin 1.2s linear infinite;
-            margin: 0 auto 25px;
+            width: 50px;
+            height: 50px;
+            animation: rmkSpin 1s linear infinite;
+            margin: 0 auto 20px;
         }
         
         @keyframes rmkSpin {
@@ -211,10 +194,10 @@
         
         .rmk-error {
             text-align: center;
-            padding: 60px 30px;
-            background: linear-gradient(135deg, #fff5f5, #fff);
-            border-radius: 16px;
-            border: 2px dashed #fed7d7;
+            padding: 40px 20px;
+            background: #fff5f5;
+            border-radius: 12px;
+            border: 1px solid #fed7d7;
             color: #c53030;
             grid-column: 1 / -1;
         }
@@ -224,30 +207,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            margin-top: 60px;
+            gap: 15px;
+            margin-top: 40px;
             flex-wrap: wrap;
         }
         
         .rmk-page-btn {
-            padding: 14px 35px;
-            background: linear-gradient(135deg, #0073aa, #005f87);
+            padding: 10px 25px;
+            background: #0073aa;
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
         }
         
         .rmk-page-btn:hover:not(:disabled) {
-            background: linear-gradient(135deg, #005f87, #004a6e);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 115, 170, 0.3);
+            background: #005f87;
         }
         
         .rmk-page-btn:disabled {
@@ -257,14 +235,12 @@
         }
         
         .rmk-page-info {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: #666;
             background: #f8f9fa;
-            padding: 12px 35px;
-            border-radius: 50px;
-            border: 2px solid #eaeaea;
-            min-width: 180px;
-            text-align: center;
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 1px solid #eaeaea;
         }
         
         /* ========== MODAL POPUP ========== */
@@ -275,8 +251,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 9998;
         }
         
@@ -287,12 +262,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 95%;
-            max-width: 1000px;
-            max-height: 90vh;
+            max-width: 900px;
+            max-height: 85vh;
             background: white;
-            border-radius: 24px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             z-index: 9999;
         }
         
@@ -303,58 +278,37 @@
         
         .rmk-modal-close {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 50px;
-            height: 50px;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #0073aa, #005f87);
+            background: #0073aa;
             color: white;
             border: none;
-            font-size: 28px;
+            font-size: 20px;
             cursor: pointer;
             z-index: 10000;
         }
         
         .rmk-modal-body {
-            padding: 60px;
+            padding: 40px;
             overflow-y: auto;
-            max-height: 85vh;
+            max-height: 75vh;
         }
         
         .rmk-modal-image {
             width: 100%;
             height: auto;
-            max-height: 500px;
+            max-height: 400px;
             object-fit: cover;
-            border-radius: 16px;
-            margin-bottom: 40px;
+            border-radius: 12px;
+            margin-bottom: 25px;
         }
         
         @media (max-width: 768px) {
-            .rmk-modal-body { padding: 30px; }
-            .rmk-modal-image { max-height: 300px; }
-        }
-        
-        /* ========== MOBILE SPECIFIC ========== */
-        @media (max-width: 768px) {
-            .rmk-post {
-                margin-bottom: 15px;
-            }
-            
-            .rmk-content {
-                padding: 20px;
-            }
-            
-            .rmk-post-title {
-                font-size: 1.2rem;
-                -webkit-line-clamp: 3;
-            }
-            
-            .rmk-excerpt {
-                font-size: 0.95rem;
-                -webkit-line-clamp: 4;
-            }
+            .rmk-modal-body { padding: 25px; }
+            .rmk-modal-image { max-height: 250px; }
         }
         `;
         
@@ -403,11 +357,11 @@
         }
         
         content += `
-            <h1 style="color:#2c3e50; font-size:2.8rem; margin:0 0 30px 0;">${post.title}</h1>
-            <div style="font-size:1.2rem; line-height:1.8;">${post.content}</div>
-            <div style="margin-top:50px;">
-                <a href="${post.link}" target="_blank" style="display:inline-flex; align-items:center; gap:12px; background:linear-gradient(135deg, #0073aa, #005f87); color:white; padding:18px 45px; border-radius:50px; text-decoration:none; font-weight:700;">
-                    Baca di Website Asli
+            <h2 style="color:#2c3e50; font-size:1.8rem; margin:0 0 20px 0;">${post.title}</h2>
+            <div style="font-size:1rem; line-height:1.6; color:#444;">${post.content}</div>
+            <div style="margin-top:30px;">
+                <a href="${post.link}" target="_blank" style="display:inline-block; background:#0073aa; color:white; padding:12px 25px; border-radius:6px; text-decoration:none;">
+                    Baca di Situs Asli
                 </a>
             </div>
         `;
@@ -442,14 +396,13 @@
             this.config = {
                 perPage: options.perPage || 6,
                 category: options.category || '5',
-                showDate: options.showDate !== false,
-                imageAspectRatio: options.imageAspectRatio || '16:9' // Default 16:9
+                showDate: options.showDate !== false
             };
             
             this.currentPage = 1;
             this.totalPages = 1;
             
-            console.log('🚀 RMK Widget Initializing - Responsive Mode');
+            console.log('🚀 RMK Widget Initializing - No Title');
             this.init();
         }
         
@@ -462,7 +415,6 @@
         renderLoading() {
             this.container.innerHTML = `
                 <div class="rmk-widget-container">
-                    <h1 class="rmk-widget-title">${this.config.title}</h1>
                     <div class="rmk-grid">
                         <div class="rmk-loading">
                             <div class="rmk-spinner"></div>
@@ -499,11 +451,9 @@
                 console.error('Error:', error);
                 this.container.innerHTML = `
                     <div class="rmk-widget-container">
-                        <h1 class="rmk-widget-title">${this.config.title}</h1>
                         <div class="rmk-error">
-                            <h3>⚠️ Gagal Memuat Berita</h3>
-                            <p>${error.message}</p>
-                            <button onclick="widget.loadPosts()" style="background:#0073aa; color:white; border:none; padding:12px 30px; border-radius:25px; margin-top:15px; cursor:pointer;">
+                            <p>Gagal memuat berita</p>
+                            <button onclick="widget.loadPosts()" style="background:#0073aa; color:white; border:none; padding:10px 20px; border-radius:4px; margin-top:10px; cursor:pointer;">
                                 Coba Lagi
                             </button>
                         </div>
@@ -516,9 +466,8 @@
             if (!posts || posts.length === 0) {
                 this.container.innerHTML = `
                     <div class="rmk-widget-container">
-                        <h1 class="rmk-widget-title">${this.config.title}</h1>
                         <div class="rmk-error">
-                            <h3>Tidak ada berita ditemukan</h3>
+                            <p>Tidak ada berita ditemukan</p>
                         </div>
                     </div>
                 `;
@@ -545,8 +494,8 @@
                     tempDiv.innerHTML = post.excerpt.rendered;
                     excerpt = tempDiv.textContent || tempDiv.innerText || '';
                     excerpt = excerpt.replace(/\s+/g, ' ').trim();
-                    if (excerpt.length > 120) {
-                        excerpt = excerpt.substring(0, 120) + '...';
+                    if (excerpt.length > 100) {
+                        excerpt = excerpt.substring(0, 100) + '...';
                     }
                 }
                 
@@ -561,9 +510,7 @@
                     });
                     dateHTML = `
                         <div class="rmk-meta">
-                            <span style="display:flex; align-items:center; gap:5px;">
-                                📅 ${dateStr}
-                            </span>
+                            <span>📅 ${dateStr}</span>
                         </div>
                     `;
                 }
@@ -589,7 +536,7 @@
                     imageHTML = `
                         <div class="rmk-image-container">
                             <div class="rmk-image-placeholder">
-                                ${postData.title.substring(0, 20)}...
+                                Tidak ada gambar
                             </div>
                         </div>
                     `;
@@ -614,7 +561,6 @@
             
             this.container.innerHTML = `
                 <div class="rmk-widget-container">
-                    <h1 class="rmk-widget-title">${this.config.title}</h1>
                     ${postsHTML}
                 </div>
             `;
@@ -690,5 +636,5 @@
         return widget;
     };
     
-    console.log('✅ RMK Widget Responsive Ready');
+    console.log('✅ RMK Widget No Title Ready');
 })();
