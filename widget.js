@@ -1,20 +1,16 @@
-// RMK WIDGET - GITHUB CDN VERSION
-// URL: https://cdn.jsdelivr.net/gh/username/rmk-widget/widget.js
-// Created: 2024
- 
+// RMK WIDGET - RESPONSIVE VERSION
+// URL: https://cdn.jsdelivr.net/gh/Roofiq09/newsandpromotion@main/widget.js
+// Updated: 2024 - Desktop 3 columns, Mobile 1 column
+
 (function() {
     'use strict';
     
-    console.log('🚀 RMK Widget v1.0 Loaded');
-    
-    // ========== CONFIGURATION ==========
-    const VERSION = '1.0.0';
-    const API_URL = 'https://rmk.co.id/wp-json/wp/v2/posts';
+    console.log('🚀 RMK Widget v1.1 Loaded - Responsive Mode');
     
     // ========== INJECT CSS ==========
     const injectCSS = () => {
         const css = `
-        /* RMK Widget Styles */
+        /* RMK Widget Styles v1.1 */
         .rmk-widget-container {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             max-width: 1200px;
@@ -29,37 +25,39 @@
             color: #2c3e50;
             margin-bottom: 40px;
             font-weight: 800;
-            position: relative;
-            padding-bottom: 15px;
         }
         
-        .rmk-widget-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #0073aa, #00a8ff);
-            border-radius: 2px;
-        }
-        
+        /* ========== GRID SYSTEM ========== */
+        /* DESKTOP: 3 columns */
         .rmk-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
             gap: 30px;
             margin-bottom: 50px;
         }
         
+        /* TABLET: 2 columns */
         @media (max-width: 1024px) {
-            .rmk-grid { grid-template-columns: repeat(2, 1fr); }
+            .rmk-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
         }
         
+        /* MOBILE: 1 column */
         @media (max-width: 768px) {
-            .rmk-grid { grid-template-columns: 1fr; }
+            .rmk-grid {
+                grid-template-columns: 1fr; /* 1 column for mobile */
+                gap: 20px;
+            }
+            
+            .rmk-widget-title {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
         }
         
+        /* ========== POST CARD ========== */
         .rmk-post {
             background: white;
             border-radius: 16px;
@@ -68,32 +66,38 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            position: relative;
             height: 100%;
             display: flex;
             flex-direction: column;
         }
         
         .rmk-post:hover {
-            transform: translateY(-12px) scale(1.02);
+            transform: translateY(-8px);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
         }
         
-        .rmk-post::before {
+        /* ========== IMAGE FIXED SIZE ========== */
+        .rmk-image-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+        
+        /* ASPECT RATIO 16:9 - SAMA SEMUA */
+        .rmk-image-container::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #0073aa, #00a8ff);
-            z-index: 2;
+            display: block;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
         }
         
         .rmk-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 220px;
-            object-fit: cover;
+            height: 100%;
+            object-fit: cover; /* Pastikan gambar cover seluruh area */
             display: block;
             transition: transform 0.5s ease;
         }
@@ -102,6 +106,23 @@
             transform: scale(1.05);
         }
         
+        /* Fallback jika gambar tidak ada */
+        .rmk-image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0073aa, #00a8ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* ========== CONTENT ========== */
         .rmk-content {
             padding: 25px;
             flex-grow: 1;
@@ -142,12 +163,6 @@
             color: #888;
         }
         
-        .rmk-date {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
         .rmk-btn {
             display: inline-flex;
             align-items: center;
@@ -164,8 +179,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            position: relative;
-            overflow: hidden;
         }
         
         .rmk-btn:hover {
@@ -174,17 +187,7 @@
             box-shadow: 0 10px 25px rgba(0, 115, 170, 0.3);
         }
         
-        .rmk-btn::after {
-            content: '→';
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-        
-        .rmk-btn:hover::after {
-            transform: translateX(5px);
-        }
-        
-        /* Loading State */
+        /* ========== LOADING & ERROR ========== */
         .rmk-loading {
             text-align: center;
             padding: 80px 20px;
@@ -206,13 +209,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        .rmk-loading p {
-            font-size: 1.2rem;
-            color: #666;
-            font-weight: 500;
-        }
-        
-        /* Error State */
         .rmk-error {
             text-align: center;
             padding: 60px 30px;
@@ -223,28 +219,7 @@
             grid-column: 1 / -1;
         }
         
-        .rmk-error h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .rmk-retry-btn {
-            background: #c53030;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.3s;
-        }
-        
-        .rmk-retry-btn:hover {
-            background: #9b2c2c;
-        }
-        
-        /* Pagination */
+        /* ========== PAGINATION ========== */
         .rmk-pagination {
             display: flex;
             justify-content: center;
@@ -267,8 +242,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            min-width: 150px;
-            justify-content: center;
         }
         
         .rmk-page-btn:hover:not(:disabled) {
@@ -281,8 +254,6 @@
             background: #e0e0e0;
             color: #999;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
         
         .rmk-page-info {
@@ -294,7 +265,6 @@
             border: 2px solid #eaeaea;
             min-width: 180px;
             text-align: center;
-            font-weight: 600;
         }
         
         /* ========== MODAL POPUP ========== */
@@ -308,7 +278,6 @@
             background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(10px);
             z-index: 9998;
-            animation: rmkFadeIn 0.3s ease;
         }
         
         .rmk-modal {
@@ -325,28 +294,11 @@
             overflow: hidden;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
             z-index: 9999;
-            animation: rmkModalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         .rmk-modal.active,
         .rmk-modal-overlay.active {
             display: block;
-        }
-        
-        @keyframes rmkFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes rmkModalSlideIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -45%) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
         }
         
         .rmk-modal-close {
@@ -362,29 +314,12 @@
             font-size: 28px;
             cursor: pointer;
             z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .rmk-modal-close:hover {
-            background: linear-gradient(135deg, #005f87, #004a6e);
-            transform: rotate(90deg) scale(1.1);
         }
         
         .rmk-modal-body {
             padding: 60px;
             overflow-y: auto;
             max-height: 85vh;
-        }
-        
-        .rmk-modal-title {
-            color: #2c3e50;
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin: 0 0 30px 0;
-            line-height: 1.2;
         }
         
         .rmk-modal-image {
@@ -394,54 +329,32 @@
             object-fit: cover;
             border-radius: 16px;
             margin-bottom: 40px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-        
-        .rmk-modal-content {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: #444;
-        }
-        
-        .rmk-modal-content p {
-            margin-bottom: 25px;
-        }
-        
-        .rmk-modal-actions {
-            display: flex;
-            gap: 20px;
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 2px solid #f0f0f0;
-            flex-wrap: wrap;
-        }
-        
-        .rmk-modal-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(135deg, #0073aa, #005f87);
-            color: white;
-            padding: 18px 45px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .rmk-modal-link:hover {
-            background: linear-gradient(135deg, #005f87, #004a6e);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 115, 170, 0.3);
         }
         
         @media (max-width: 768px) {
             .rmk-modal-body { padding: 30px; }
-            .rmk-modal-title { font-size: 2rem; }
-            .rmk-modal-actions { flex-direction: column; }
-            .rmk-widget-title { font-size: 2rem; }
-            .rmk-modal-link { width: 100%; justify-content: center; }
+            .rmk-modal-image { max-height: 300px; }
+        }
+        
+        /* ========== MOBILE SPECIFIC ========== */
+        @media (max-width: 768px) {
+            .rmk-post {
+                margin-bottom: 15px;
+            }
+            
+            .rmk-content {
+                padding: 20px;
+            }
+            
+            .rmk-post-title {
+                font-size: 1.2rem;
+                -webkit-line-clamp: 3;
+            }
+            
+            .rmk-excerpt {
+                font-size: 0.95rem;
+                -webkit-line-clamp: 4;
+            }
         }
         `;
         
@@ -467,11 +380,9 @@
         
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         
-        // Event listeners
         document.getElementById('rmk-modal-close').addEventListener('click', closeModal);
         document.getElementById('rmk-modal-overlay').addEventListener('click', closeModal);
         
-        // Close on ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
@@ -485,18 +396,6 @@
         const modalOverlay = document.getElementById('rmk-modal-overlay');
         const modal = document.getElementById('rmk-modal');
         
-        // Format date
-        let dateText = '';
-        if (post.date) {
-            const date = new Date(post.date);
-            dateText = date.toLocaleDateString('id-ID', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-        
-        // Create content
         let content = '';
         
         if (post.image) {
@@ -504,19 +403,12 @@
         }
         
         content += `
-            ${dateText ? `<div style="color:#0073aa; font-weight:600; margin-bottom:15px;">📅 ${dateText}</div>` : ''}
-            <h1 class="rmk-modal-title">${post.title}</h1>
-            <div class="rmk-modal-content">${post.content}</div>
-            <div class="rmk-modal-actions">
-                <a href="${post.link}" target="_blank" class="rmk-modal-link">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-                    </svg>
+            <h1 style="color:#2c3e50; font-size:2.8rem; margin:0 0 30px 0;">${post.title}</h1>
+            <div style="font-size:1.2rem; line-height:1.8;">${post.content}</div>
+            <div style="margin-top:50px;">
+                <a href="${post.link}" target="_blank" style="display:inline-flex; align-items:center; gap:12px; background:linear-gradient(135deg, #0073aa, #005f87); color:white; padding:18px 45px; border-radius:50px; text-decoration:none; font-weight:700;">
                     Baca di Website Asli
                 </a>
-                <button onclick="closeModal()" style="background:transparent; color:#666; border:3px solid #eaeaea; padding:18px 45px; border-radius:50px; font-weight:700; font-size:1.1rem; cursor:pointer; transition:all 0.3s;">
-                    Tutup Modal
-                </button>
             </div>
         `;
         
@@ -548,18 +440,17 @@
             }
             
             this.config = {
-                perPage: options.perPage || 3,
+                perPage: options.perPage || 6,
                 category: options.category || '5',
                 title: options.title || '📰 Berita Terbaru',
                 showDate: options.showDate !== false,
-                version: VERSION
+                imageAspectRatio: options.imageAspectRatio || '16:9' // Default 16:9
             };
             
             this.currentPage = 1;
             this.totalPages = 1;
-            this.posts = [];
             
-            console.log(`🚀 RMK Widget v${VERSION} initializing`);
+            console.log('🚀 RMK Widget Initializing - Responsive Mode');
             this.init();
         }
         
@@ -576,23 +467,8 @@
                     <div class="rmk-grid">
                         <div class="rmk-loading">
                             <div class="rmk-spinner"></div>
-                            <p>Memuat berita terbaru...</p>
+                            <p>Memuat berita...</p>
                         </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        renderError(error) {
-            this.container.innerHTML = `
-                <div class="rmk-widget-container">
-                    <h1 class="rmk-widget-title">${this.config.title}</h1>
-                    <div class="rmk-error">
-                        <h3>⚠️ Gagal Memuat Berita</h3>
-                        <p>${error.message || 'Terjadi kesalahan saat mengambil data.'}</p>
-                        <button class="rmk-retry-btn" onclick="widget.loadPosts()">
-                            Coba Lagi
-                        </button>
                     </div>
                 </div>
             `;
@@ -600,8 +476,6 @@
         
         async loadPosts(page = 1) {
             try {
-                console.log(`📡 Fetching page ${page}...`);
-                
                 const params = new URLSearchParams({
                     _embed: 'true',
                     per_page: this.config.perPage.toString(),
@@ -609,34 +483,43 @@
                     categories: this.config.category
                 });
                 
-                const response = await fetch(`${API_URL}?${params}`);
+                const response = await fetch(`https://rmk.co.id/wp-json/wp/v2/posts?${params}`);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    throw new Error(`HTTP ${response.status}`);
                 }
                 
-                this.posts = await response.json();
+                const posts = await response.json();
                 this.totalPages = parseInt(response.headers.get('X-WP-TotalPages')) || 1;
                 this.currentPage = page;
                 
-                console.log(`✅ Loaded ${this.posts.length} posts`);
-                this.renderPosts();
+                this.renderPosts(posts);
                 this.renderPagination();
                 
             } catch (error) {
-                console.error('❌ Error loading posts:', error);
-                this.renderError(error);
+                console.error('Error:', error);
+                this.container.innerHTML = `
+                    <div class="rmk-widget-container">
+                        <h1 class="rmk-widget-title">${this.config.title}</h1>
+                        <div class="rmk-error">
+                            <h3>⚠️ Gagal Memuat Berita</h3>
+                            <p>${error.message}</p>
+                            <button onclick="widget.loadPosts()" style="background:#0073aa; color:white; border:none; padding:12px 30px; border-radius:25px; margin-top:15px; cursor:pointer;">
+                                Coba Lagi
+                            </button>
+                        </div>
+                    </div>
+                `;
             }
         }
         
-        renderPosts() {
-            if (!this.posts || this.posts.length === 0) {
+        renderPosts(posts) {
+            if (!posts || posts.length === 0) {
                 this.container.innerHTML = `
                     <div class="rmk-widget-container">
                         <h1 class="rmk-widget-title">${this.config.title}</h1>
                         <div class="rmk-error">
                             <h3>Tidak ada berita ditemukan</h3>
-                            <p>Belum ada postingan untuk ditampilkan.</p>
                         </div>
                     </div>
                 `;
@@ -645,7 +528,7 @@
             
             let postsHTML = '<div class="rmk-grid">';
             
-            this.posts.forEach(post => {
+            posts.forEach(post => {
                 // Get featured image
                 let imageUrl = '';
                 let imageAlt = post.title?.rendered || 'Post Image';
@@ -663,8 +546,8 @@
                     tempDiv.innerHTML = post.excerpt.rendered;
                     excerpt = tempDiv.textContent || tempDiv.innerText || '';
                     excerpt = excerpt.replace(/\s+/g, ' ').trim();
-                    if (excerpt.length > 150) {
-                        excerpt = excerpt.substring(0, 150) + '...';
+                    if (excerpt.length > 120) {
+                        excerpt = excerpt.substring(0, 120) + '...';
                     }
                 }
                 
@@ -679,11 +562,8 @@
                     });
                     dateHTML = `
                         <div class="rmk-meta">
-                            <span class="rmk-date">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#888">
-                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                                </svg>
-                                ${dateStr}
+                            <span style="display:flex; align-items:center; gap:5px;">
+                                📅 ${dateStr}
                             </span>
                         </div>
                     `;
@@ -698,9 +578,27 @@
                     excerpt: excerpt
                 };
                 
+                // Image HTML with fixed aspect ratio
+                let imageHTML = '';
+                if (imageUrl) {
+                    imageHTML = `
+                        <div class="rmk-image-container">
+                            <img src="${imageUrl}" alt="${imageAlt}" class="rmk-image" loading="lazy">
+                        </div>
+                    `;
+                } else {
+                    imageHTML = `
+                        <div class="rmk-image-container">
+                            <div class="rmk-image-placeholder">
+                                ${postData.title.substring(0, 20)}...
+                            </div>
+                        </div>
+                    `;
+                }
+                
                 postsHTML += `
                     <div class="rmk-post" onclick="openModal(${JSON.stringify(postData).replace(/"/g, '&quot;')})">
-                        ${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" class="rmk-image" loading="lazy">` : ''}
+                        ${imageHTML}
                         <div class="rmk-content">
                             <h3 class="rmk-post-title">${postData.title}</h3>
                             ${dateHTML}
@@ -730,24 +628,17 @@
             const paginationHTML = `
                 <div class="rmk-pagination">
                     <button class="rmk-page-btn" id="rmk-prev-btn" ${this.currentPage <= 1 ? 'disabled' : ''}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
-                        </svg>
-                        Sebelumnya
+                        ← Sebelumnya
                     </button>
                     <span class="rmk-page-info">Halaman ${this.currentPage} dari ${this.totalPages}</span>
                     <button class="rmk-page-btn" id="rmk-next-btn" ${this.currentPage >= this.totalPages ? 'disabled' : ''}>
-                        Selanjutnya
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-                        </svg>
+                        Selanjutnya →
                     </button>
                 </div>
             `;
             
             container.insertAdjacentHTML('beforeend', paginationHTML);
             
-            // Add event listeners
             const prevBtn = container.querySelector('#rmk-prev-btn');
             const nextBtn = container.querySelector('#rmk-next-btn');
             
@@ -767,12 +658,6 @@
                 });
             }
         }
-        
-        updateConfig(newConfig) {
-            this.config = { ...this.config, ...newConfig };
-            this.currentPage = 1;
-            this.loadPosts();
-        }
     }
     
     // ========== GLOBAL EXPORTS ==========
@@ -780,7 +665,7 @@
     window.openModal = openModal;
     window.closeModal = closeModal;
     
-    // Auto-initialize widgets with data attributes
+    // Auto-initialize
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-rmk-widget]').forEach(container => {
             if (!container.dataset.initialized) {
@@ -792,14 +677,12 @@
                 });
                 
                 container.dataset.initialized = 'true';
-                container.widget = widget; // Store reference
-                
-                console.log('✅ Auto-initialized widget');
+                container.widget = widget;
             }
         });
     });
     
-    // Manual initialization function
+    // Manual initialization
     window.initRMKWidget = (containerId, options = {}) => {
         const widget = new RMKWidget(containerId, options);
         const container = document.getElementById(containerId);
@@ -809,5 +692,5 @@
         return widget;
     };
     
-    console.log('✅ RMK Widget script ready');
+    console.log('✅ RMK Widget Responsive Ready');
 })();
