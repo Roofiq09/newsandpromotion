@@ -442,7 +442,6 @@
             this.config = {
                 perPage: options.perPage || 6,
                 category: options.category || '5',
-                title: options.title || '📰 Berita Terbaru',
                 showDate: options.showDate !== false,
                 imageAspectRatio: options.imageAspectRatio || '16:9' // Default 16:9
             };
