@@ -548,7 +548,7 @@
             }
             
             this.config = {
-                perPage: options.perPage || 6,
+                perPage: options.perPage || 3,
                 category: options.category || '5',
                 title: options.title || '📰 Berita Terbaru',
                 showDate: options.showDate !== false,
